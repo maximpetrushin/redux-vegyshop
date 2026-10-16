@@ -4,4 +4,4 @@
 Студент Петрушин Максим
 
 
-https://maximpetrushin.github.io/VegetableShop/
+https://maximpetrushin.github.io/redux-vegyshop/
