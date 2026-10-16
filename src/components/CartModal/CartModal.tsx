@@ -1,23 +1,22 @@
 import {Box, Text, Group, Image, ActionIcon, Stack, Divider} from "@mantine/core";
-import {useContext} from "react";
-import CartContext from "../../context/CartContext.tsx";
 import emptyCartImage from '../../assets/cart_empty.svg'
-
+import {useAppSelector, useAppDispatch} from "../../store/hooks.ts";
+import { handleCartQty} from "../../store/cartSlice.ts";
 
 
 function CartModal() {
 
-    const context = useContext(CartContext);
+    const cart = useAppSelector(store => store.cart.cart);
 
-    if (!context) {
-        return null;
-    }
+    const dispatch = useAppDispatch();
+
+    const total = cart.reduce((acc, item) => acc + item.product.price * item.qty, 0)
 
     return (
         <Stack>
-            {context.cart.length !== 0 ? (
+            {cart.length !== 0 ? (
                 <>
-                {context.cart.map(item =>
+                {cart.map(item =>
                     <Box key={item.product.id}>
                         <Group justify='space-between'>
                             <Group>
@@ -35,7 +34,10 @@ function CartModal() {
                                 <ActionIcon
                                     variant="light"
                                     color="qtyButton"
-                                    onClick={() => context.handleCartQty(item.product.id, item.qty - 1)}
+                                    onClick={() => dispatch(handleCartQty({
+                                        productId: item.product.id,
+                                        newQty: item.qty - 1,
+                                    }))}
                                 >
                                     -
                                 </ActionIcon>
@@ -45,7 +47,10 @@ function CartModal() {
                                 <ActionIcon
                                     variant="light"
                                     color="qtyButton"
-                                    onClick={() => context.handleCartQty(item.product.id, item.qty + 1)}
+                                    onClick={() => dispatch(handleCartQty({
+                                        productId: item.product.id,
+                                        newQty: item.qty + 1,
+                                    }))}
                                 >
                                     +
                                 </ActionIcon>
@@ -57,7 +62,7 @@ function CartModal() {
                     <Box>
                         <Group justify='space-between'>
                             <Text>TOTAL:</Text>
-                            <Text>{'$' + context.getCartTotal()}</Text>
+                            <Text>{'$' + total}</Text>
                         </Group>
                     </Box>
                 </>

@@ -1,19 +1,17 @@
 import { Box, Group, Pill, Button, Popover, ScrollArea } from "@mantine/core";
-import {useContext} from "react";
 import {ShoppingCartIcon} from "@phosphor-icons/react";
-import CartContext from "../../context/CartContext";
 import CartModal from "../CartModal/CartModal";
+import {useAppSelector} from "../../store/hooks.ts";
 
 
 function Header() {
 
-    const context = useContext(CartContext);
 
     const cartIcon = <ShoppingCartIcon size={20}/>;
 
-    if (!context) {
-        return null;
-    }
+    const cart = useAppSelector(item => item.cart.cart)
+
+    const total = cart.reduce((acc, item) => acc + item.product.price * item.qty, 0)
 
     return (
         <Box
@@ -60,8 +58,8 @@ function Header() {
                                 rightSection={cartIcon}
                             >
                                 <Group gap={8}>
-                                    {context.cart.length !== 0 &&
-                                        (<Pill>{context.cart.length} / ${context.getCartTotal()}</Pill>)}
+                                    {cart.length !== 0 &&
+                                        (<Pill>{cart.length} / ${total}</Pill>)}
                                     Cart
                                 </Group>
                             </Button>

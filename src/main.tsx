@@ -1,9 +1,11 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App.tsx';
+import {Provider} from 'react-redux';
+import {store} from './store/store' 
 import { MantineProvider, createTheme } from '@mantine/core';
-import type {MantineColorsTuple } from '@mantine/core'
-import '@mantine/core/styles.css'
+import type {MantineColorsTuple } from '@mantine/core';
+import '@mantine/core/styles.css';
 
 const cartButton:MantineColorsTuple = [
     "#eafbee",
@@ -47,8 +49,10 @@ const theme = createTheme({
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <MantineProvider theme={theme}>
-        <App />
-    </MantineProvider>
+      <Provider store={store}>
+          <MantineProvider theme={theme}>
+              <App />
+          </MantineProvider>
+      </Provider>
   </StrictMode>,
 )

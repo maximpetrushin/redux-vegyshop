@@ -1,8 +1,8 @@
 import { Card, Image, Text, Stack, Group, ActionIcon, Button } from '@mantine/core';
 import {useCounter} from "@mantine/hooks";
-import {useContext} from "react";
-import CartContext from "../../context/CartContext.tsx";
 import {ShoppingCartIcon} from "@phosphor-icons/react";
+import {useAppDispatch} from "../../store/hooks.ts";
+import {handleAddToCart} from "../../store/cartSlice.ts";
 
 
 type Product = {
@@ -21,15 +21,12 @@ type ProductCardProps = {
 
 function ProductCard({product}: ProductCardProps) {
 
+    const dispatch = useAppDispatch();
+
     const cartIcon = <ShoppingCartIcon size={20}/>
 
     const [qty, {increment, decrement}] = useCounter(1, {min: 1});
 
-    const context = useContext(CartContext);
-
-    if (!context) {
-        return null;
-    }
 
     return (
 
@@ -57,7 +54,7 @@ function ProductCard({product}: ProductCardProps) {
                 <Group justify='space-between'>
                     <Text fw='bold'>{'$ ' + product.price}</Text>
                     <Button
-                        onClick={() => context.handleAddToCart(product, qty)}
+                        onClick={() => dispatch(handleAddToCart({product, qty}))}
                         color='cartButton'
                         variant='light'
                         rightSection={cartIcon}

@@ -1,21 +1,17 @@
 import {Loader, Text, SimpleGrid, Container, Flex} from "@mantine/core";
 import ProductCard from "../ProductCard/ProductCard";
+import {useAppSelector} from "../../store/hooks.ts";
 
 
-type Product = {
-    id: number;
-    name: string;
-    price: number;
-    image: string;
-    category: string;
-}
 
-type ProductProps = {
-    products: Product[] | null,
-}
 
-function ProductList({products}: ProductProps) {
-    if (!products) {
+function ProductList() {
+
+    const products = useAppSelector(state => state.products.products);
+
+    const status = useAppSelector(state => state.products.status)
+
+    if (status === 'loading') {
         return (
             <Container
                 fluid
